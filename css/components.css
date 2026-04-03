@@ -204,3 +204,39 @@
   margin-top: 4px;
   font-size: 0.7rem;
 }
+
+/* ── Data callout row (Chapter 03) ─────────────────────── */
+.data-callout-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(201,168,76,0.12);
+  border: 1px solid rgba(201,168,76,0.12);
+  margin-top: 2rem;
+}
+
+@media (max-width: 800px) {
+  .data-callout-row { grid-template-columns: 1fr; }
+}
+
+.data-callout {
+  background: var(--black);
+  padding: 1.75rem 2rem;
+}
+
+.dc-num {
+  font-family: var(--display);
+  font-size: 2.8rem;
+  color: var(--gold);
+  line-height: 1;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.5rem;
+}
+
+.dc-label {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: rgba(240,236,227,0.45);
+  line-height: 1.65;
+  max-width: 260px;
+}

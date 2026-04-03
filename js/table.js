@@ -1,9 +1,6 @@
 /* ─────────────────────────────────────────────────────────
    js/table.js
-   Renders and re-sorts the all-time leaderboard table
-   (Chapter 04). Also manages the hover tooltip that appears
-   on each game row.
-
+   Sortable leaderboard table (Chapter 04) + hover tooltip.
    Depends on: data.js, utils.js
 ───────────────────────────────────────────────────────── */
 
@@ -12,8 +9,6 @@
   const maxEarnings = Math.max(...GAMES.map(g => g.earnings));
   const tooltip     = document.getElementById('tooltip');
   let currentSort   = 'earnings';
-
-  // ── Table rendering ───────────────────────────────────
 
   function renderTable(sort) {
     const key = sort === 'earnings'    ? 'earnings'
@@ -45,7 +40,6 @@
       tr.addEventListener('mouseleave', hideTooltip);
       tbody.appendChild(tr);
 
-      // Set actual bar width after a short delay to trigger CSS transition
       requestAnimationFrame(() => {
         setTimeout(() => {
           tr.querySelector('.bar-fill').style.width = pct + '%';
@@ -54,10 +48,7 @@
     });
   }
 
-  // Initial render
   renderTable('earnings');
-
-  // ── Sort tab listeners ────────────────────────────────
 
   document.querySelectorAll('.filter-tab').forEach(tab => {
     tab.addEventListener('click', () => {
@@ -68,7 +59,7 @@
     });
   });
 
-  // ── Tooltip ───────────────────────────────────────────
+  // ── Tooltip ────────────────────────────────────────────
 
   function showTooltip(e, g) {
     document.getElementById('tt-game').textContent     = g.game;

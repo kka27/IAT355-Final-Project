@@ -1,9 +1,8 @@
 /* ─────────────────────────────────────────────────────────
    js/scrolly.js
-   Manages the sticky scrollytelling section (Chapter 02).
-   Uses IntersectionObserver to detect which step is active
-   and redraws the highlight bar chart accordingly.
-
+   Sticky scrollytelling section (Chapter 02).
+   Watches 7 step cards, highlights the active year
+   in the bar chart, and syncs the label.
    Depends on: data.js, utils.js
 ───────────────────────────────────────────────────────── */
 
@@ -11,16 +10,11 @@
 
   let scrollyChart = null;
 
-  /**
-   * Rebuild the scrolly bar chart, highlighting the year
-   * that corresponds to the current active step index.
-   * @param {number} stepIdx - index into SCROLLY_HIGHLIGHTS
-   */
   function buildScrollyChart(stepIdx) {
-    const item     = SCROLLY_HIGHLIGHTS[stepIdx];
-    const yearIdx  = YEARS.indexOf(item.year);
-    const colors   = ANNUAL_EARNINGS.map((_, i) =>
-      i === yearIdx ? COLOR.GOLD : COLOR.GOLD_A(0.15)
+    const item    = SCROLLY_HIGHLIGHTS[stepIdx];
+    const yearIdx = YEARS.indexOf(item.year);
+    const colors  = ANNUAL_EARNINGS.map((_, i) =>
+      i === yearIdx ? COLOR.GOLD : COLOR.GOLD_A(0.12)
     );
 
     if (scrollyChart) scrollyChart.destroy();
@@ -38,9 +32,17 @@
       },
       options: {
         ...baseOpts,
-        animation: { duration: 400 },
+        animation: { duration: 350 },
         scales: {
           ...baseOpts.scales,
+          x: {
+            ...baseOpts.scales.x,
+            ticks: {
+              ...baseOpts.scales.x.ticks,
+              maxTicksLimit: 8,
+              maxRotation: 0,
+            },
+          },
           y: {
             ...baseOpts.scales.y,
             ticks: { ...baseOpts.scales.y.ticks, callback: v => fmtM(v) },
@@ -54,13 +56,11 @@
     });
 
     document.getElementById('scrolly-chart-label').textContent =
-      `${item.year}: ${fmtM(item.pool)} in prize money`;
+      `${item.year} — ${fmtM(item.pool)} distributed`;
   }
 
-  // Render initial state (step 0)
   buildScrollyChart(0);
 
-  // Observe each step card and update on entry
   const stepEls = document.querySelectorAll('.step');
 
   const stepObs = new IntersectionObserver(entries => {
