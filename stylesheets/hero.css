@@ -1,0 +1,128 @@
+/* ─────────────────────────────────────────────────────────
+   hero.css
+   Styles for the full-screen hero section and its
+   entrance animations.
+───────────────────────────────────────────────────────── */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes lineGrow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+#hero {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0 8vw;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ambient background glow */
+#hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 70% 50%, rgba(201,168,76,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 20% 80%, rgba(31,168,152,0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.2s forwards;
+}
+
+.hero-title {
+  font-family: var(--display);
+  font-size: clamp(5rem, 18vw, 16rem);
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+  color: var(--off-white);
+  opacity: 0;
+  animation: fadeUp 0.9s 0.4s forwards;
+}
+
+.hero-title span {
+  color: var(--gold);
+}
+
+.hero-sub {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  font-weight: 300;
+  color: rgba(240,236,227,0.6);
+  max-width: 520px;
+  margin-top: 2rem;
+  line-height: 1.6;
+  opacity: 0;
+  animation: fadeUp 0.9s 0.7s forwards;
+}
+
+/* Hero stats row */
+.hero-stat-bar {
+  display: flex;
+  gap: 4rem;
+  margin-top: 4rem;
+  opacity: 0;
+  animation: fadeUp 0.9s 1s forwards;
+}
+
+.hero-stat {
+  text-align: left;
+}
+
+.hero-stat .num {
+  font-family: var(--display);
+  font-size: 2.8rem;
+  color: var(--gold);
+  letter-spacing: 0.05em;
+  line-height: 1;
+}
+
+.hero-stat .label {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: rgba(240,236,227,0.45);
+  margin-top: 4px;
+}
+
+/* Scroll hint at bottom */
+.scroll-hint {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 8vw;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(240,236,227,0.3);
+  opacity: 0;
+  animation: fadeUp 1s 1.5s forwards;
+}
+
+.scroll-line {
+  width: 40px;
+  height: 1px;
+  background: var(--gold);
+  transform-origin: left;
+  animation: lineGrow 1.2s 1.8s both;
+}

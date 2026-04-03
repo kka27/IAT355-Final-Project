@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THE PRIZE — Esports Rises</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300&display=swap"
+    rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="stylesheets/base.css">
+  <link rel="stylesheet" href="stylesheets/hero.css">
+  <link rel="stylesheet" href="stylesheets/sections.css">
+  <link rel="stylesheet" href="stylesheets/charts.css">
+  <link rel="stylesheet" href="stylesheets/components.css">
+
+  <!-- Chart.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+
+<body>
+
+  <!-- ═══════════════════ HERO ═══════════════════════════ -->
+  <section id="hero">
+    <p class="hero-eyebrow">A data story · Esports prize money · 2000 – 2023</p>
+    <h1 class="hero-title">THE<br><span>PRIZE</span></h1>
+    <p class="hero-sub">How competitive gaming quietly became a billion-dollar industry — one tournament at a time.</p>
+    <div class="hero-stat-bar">
+      <div class="hero-stat">
+        <div class="num" id="hero-counter-earnings">$0</div>
+        <div class="label">Total Prize Money Awarded</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num" id="hero-counter-tournaments">0</div>
+        <div class="label">Tournaments Tracked</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num" id="hero-counter-winners">0</div>
+        <div class="label">Unique Winners</div>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <div class="scroll-line"></div>
+      Scroll to explore
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ═══════════════════ SECTION 1 · GROWTH OVER TIME ═══ -->
+  <section class="section reveal" id="section-growth">
+    <p class="section-label">Chapter 01 · The Ascent</p>
+    <h2 class="section-title">FROM BASEMENT<br>TO BILLION</h2>
+    <p class="section-body">Prize pools in esports have grown over 10,000× since the early 2000s. What started as small
+      LAN party cash prizes exploded into The International's $40M+ purses. Every year, the stakes got higher.</p>
+
+    <div class="chart-wrap">
+      <p class="chart-title">Total Annual Prize Money · All Esports Titles Combined (USD)</p>
+      <canvas id="growthChart"></canvas>
+    </div>
+
+    <div class="two-col" style="margin-top:3rem;">
+      <div class="chart-wrap">
+        <p class="chart-title">Total Tournaments Per Year</p>
+        <canvas id="tournamentsChart"></canvas>
+      </div>
+      <div class="chart-wrap">
+        <p class="chart-title">Unique Winners Per Year</p>
+        <canvas id="winnersChart"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ═══════════════════ SECTION 2 · SCROLLYTELLING ════════ -->
+  <section class="section reveal" id="section-moments" style="padding-bottom:0;">
+    <p class="section-label">Chapter 02 · Turning Points</p>
+    <h2 class="section-title">THE MOMENTS<br>THAT CHANGED<br>EVERYTHING</h2>
+    <p class="section-body">A handful of pivotal years reshaped what esports could be — in prize money, in cultural
+      reach, and in who got to compete.</p>
+  </section>
+
+  <div id="scrolly" class="clearfix">
+    <div class="scrolly-sticky">
+      <div class="chart-wrap" style="width:100%;">
+        <p class="chart-title" id="scrolly-chart-label">Prize pool milestone</p>
+        <canvas id="scrollyChart" style="max-height:360px;"></canvas>
+      </div>
+    </div>
+    <div class="scrolly-steps">
+      <div class="step" data-step="0">
+        <div class="step-content">
+          <div class="step-year">2001</div>
+          <div class="step-headline">The First Sparks</div>
+          <p class="step-text">Counter-Strike and StarCraft dominate the earliest prize pools. Total annual prize money
+            is under $3M. Tournaments are regional, grassroots, and largely unknown to mainstream audiences.</p>
+        </div>
+      </div>
+      <div class="step" data-step="1">
+        <div class="step-content">
+          <div class="step-year">2006</div>
+          <div class="step-headline">The WCG Era</div>
+          <p class="step-text">The World Cyber Games draws over 70 countries. Prize totals cross $10M globally for the
+            first time. RTS and FPS games reign. A faint outline of an industry begins to form.</p>
+        </div>
+      </div>
+      <div class="step" data-step="2">
+        <div class="step-content">
+          <div class="step-year">2011</div>
+          <div class="step-headline">League Arrives</div>
+          <p class="step-text">League of Legends launches its competitive circuit. The MOBA genre explodes. Total prize
+            pools surge past $30M. A new generation of titles — built for esports — begins its takeover.</p>
+        </div>
+      </div>
+      <div class="step" data-step="3">
+        <div class="step-content">
+          <div class="step-year">2013</div>
+          <div class="step-headline">Dota 2 & The International</div>
+          <p class="step-text">Valve's crowdfunded prize model debuts — and redefines what a prize pool can be. The
+            International breaks $2.8M. The following years see it hit $10M, then $20M, then $40M. Nothing would be the
+            same.</p>
+        </div>
+      </div>
+      <div class="step" data-step="4">
+        <div class="step-content">
+          <div class="step-year">2018</div>
+          <div class="step-headline">Fortnite Changes Everything</div>
+          <p class="step-text">Epic Games commits $100M to Fortnite tournaments. Battle royale explodes as a genre.
+            Casual gaming and elite competition blur. Over 40 million players enter competitive events.</p>
+        </div>
+      </div>
+      <div class="step" data-step="5">
+        <div class="step-content">
+          <div class="step-year">2020</div>
+          <div class="step-headline">The Pandemic Pivot</div>
+          <p class="step-text">COVID-19 shuts down physical venues — but online prize pools surge. Esports becomes one
+            of the only live sports still running. A genre built for screens thrives when screens are all there is.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider" style="margin: 0 8vw;"></div>
+
+  <!-- ═══════════════════ SECTION 3 · BY GENRE ════════════ -->
+  <section class="section reveal" id="section-genre">
+    <p class="section-label">Chapter 03 · The Genres</p>
+    <h2 class="section-title">WHICH GAMES<br>TOOK THE MONEY</h2>
+    <p class="section-body">Not all genres are created equal. MOBAs dominate total prize pools, but Battle Royale grew
+      fastest. Click any genre to explore its top titles.</p>
+
+    <div class="genre-grid" id="genre-grid"></div>
+
+    <div id="genre-panel">
+      <div class="two-col" style="margin-top:0;">
+        <div class="chart-wrap">
+          <p class="chart-title" id="genre-chart-label">Top games by earnings</p>
+          <canvas id="genreChart" style="max-height:320px;"></canvas>
+        </div>
+        <div class="chart-wrap">
+          <p class="chart-title">Online vs. Offline Prize Split</p>
+          <canvas id="onlineOfflineChart" style="max-height:320px;"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ═══════════════════ SECTION 4 · TOP GAMES TABLE ════ -->
+  <section class="section reveal" id="section-games">
+    <p class="section-label">Chapter 04 · The Leaderboard</p>
+    <h2 class="section-title">ALL-TIME<br>RANKINGS</h2>
+    <p class="section-body">Sorted by total prize money across all tournaments. Mouse over any row to explore individual
+      stats.</p>
+
+    <div class="filter-tabs" id="sort-tabs">
+      <button class="filter-tab active" data-sort="earnings">By Earnings</button>
+      <button class="filter-tab" data-sort="tournaments">By Tournaments</button>
+      <button class="filter-tab" data-sort="winners">By Winners</button>
+    </div>
+
+    <table class="games-table" id="games-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Game</th>
+          <th>Genre</th>
+          <th>Total Prize Pool</th>
+          <th>Tournaments</th>
+          <th style="width:180px">Share</th>
+        </tr>
+      </thead>
+      <tbody id="games-tbody"></tbody>
+    </table>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ═══════════════════ SECTION 5 · ONLINE SHIFT ═══════ -->
+  <section class="section reveal" id="section-online">
+    <p class="section-label">Chapter 05 · The Digital Shift</p>
+    <h2 class="section-title">WHEN ONLINE<br>BECAME REAL</h2>
+    <p class="section-body">Online prize money as a share of total esports earnings has grown dramatically — especially
+      post-2020. The physical arena is optional. The competition never stopped.</p>
+
+    <div class="chart-wrap">
+      <p class="chart-title"><span class="live-dot"></span>Online vs. LAN Prize Pools Over Time (stacked)</p>
+      <canvas id="onlineStackedChart" style="max-height:380px;"></canvas>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-title">THE PRIZE</div>
+    <div class="footer-note">
+      Data based on publicly available esports earnings records, representative of top titles by prize pool,
+      2000–2023.<br>
+      Built as an interactive prototype. Schema includes: Game, Release Date, Genre, Total Earnings, Online Earnings,
+      Total Winners, Total Tournaments.
+    </div>
+  </footer>
+
+  <!-- Tooltip (global UI element) -->
+  <div class="tooltip" id="tooltip">
+    <div class="tooltip-game" id="tt-game"></div>
+    <div class="tooltip-stat" id="tt-earnings"></div>
+    <div id="tt-extra"></div>
+  </div>
+
+  <!-- JavaScript modules (order matters) -->
+  <script src="scripts/data.js"></script>
+  <script src="scripts/utils.js"></script>
+  <script src="scripts/charts.js"></script>
+  <script src="scripts/scrolly.js"></script>
+  <script src="scripts/genre.js"></script>
+  <script src="scripts/table.js"></script>
+  <script src="scripts/main.js"></script>
+
+</body>
+
+</html>
