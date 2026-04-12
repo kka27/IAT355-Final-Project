@@ -28,6 +28,11 @@
         2400
       );
     }, 1200);
+
+    initCharts();
+    initScrolly();
+    initGenreCards();
+    initTable();
   });
 
   // Reveal sections on scroll

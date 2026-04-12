@@ -25,6 +25,7 @@
   letter-spacing: 0.03em;
   margin-bottom: 1.5rem;
   max-width: 800px;
+  color: var(--gold);
 }
 
 .section-body {
