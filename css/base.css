@@ -127,9 +127,42 @@ div[id] {
 
 /* ── Inline term tooltips ──────────────────────────────── */
 .term {
-  border-bottom: 1px dashed rgba(201, 168, 76, 0.5);
-  cursor: help;
+  border-bottom: 1px dotted rgba(201, 168, 76, 0.4);
+  cursor: default;
   color: inherit;
+}
+
+#term-tooltip {
+  position: fixed;
+  z-index: 500;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+
+  background: rgba(8, 10, 14, 0.96);
+  border: 1px solid rgba(201, 168, 76, 0.25);
+  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
+  max-width: 260px;
+
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  line-height: 1.6;
+  color: rgba(240, 236, 227, 0.75);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+}
+
+#term-tooltip .term-tooltip-word {
+  display: block;
+  font-family: var(--serif);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 0.25rem;
+}
+
+#term-tooltip.visible {
+  opacity: 1;
 }
 
 /* ── Chart insight callout ─────────────────────────────── */
