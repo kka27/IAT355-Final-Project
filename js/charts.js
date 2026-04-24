@@ -103,7 +103,8 @@ function renderGrowthChart() {
       scales: {
         x: {
           grid: { color: 'rgba(240,236,227,0.05)' },
-          ticks: { color: themeSubtle, maxTicksLimit: 10 }
+          ticks: { color: themeSubtle, maxTicksLimit: 10 },
+          title: { display: true, text: 'Year', color: themeSubtle, font: { size: 11, family: 'DM Mono, monospace' } }
         },
         y: {
           grid: { color: 'rgba(240,236,227,0.05)' },
@@ -112,7 +113,8 @@ function renderGrowthChart() {
             callback: function(v) { return fmtM(v); },
             maxTicksLimit: 6
           },
-          beginAtZero: true
+          beginAtZero: true,
+          title: { display: true, text: 'Prize Money (USD)', color: themeSubtle, font: { size: 11, family: 'DM Mono, monospace' } }
         }
       }
     }
@@ -155,11 +157,12 @@ function renderTournamentsChart() {
         }
       },
       scales: {
-        x: { grid: { display: false }, ticks: { color: themeSubtle, maxTicksLimit: 8 } },
+        x: { grid: { display: false }, ticks: { color: themeSubtle, maxTicksLimit: 8 }, title: { display: true, text: 'Year', color: themeSubtle, font: { size: 11, family: 'DM Mono, monospace' } } },
         y: {
           grid: { color: 'rgba(240,236,227,0.05)' },
           ticks: { callback: v => fmtNum(v), color: themeSubtle },
-          beginAtZero: true
+          beginAtZero: true,
+          title: { display: true, text: 'Tournaments', color: themeSubtle, font: { size: 11, family: 'DM Mono, monospace' } }
         }
       }
     }
@@ -206,11 +209,12 @@ function renderWinnersChart() {
         }
       },
       scales: {
-        x: { grid: { color: 'rgba(240,236,227,0.05)' }, ticks: { color: themeSubtle, maxTicksLimit: 8 } },
+        x: { grid: { color: 'rgba(240,236,227,0.05)' }, ticks: { color: themeSubtle, maxTicksLimit: 8 }, title: { display: true, text: 'Year', color: themeSubtle, font: { size: 11, family: 'DM Mono, monospace' } } },
         y: {
           grid: { color: 'rgba(240,236,227,0.05)' },
           ticks: { callback: v => fmtNum(v), color: themeSubtle },
-          beginAtZero: true
+          beginAtZero: true,
+          title: { display: true, text: 'Unique Players', color: themeSubtle, font: { size: 11, family: 'DM Mono, monospace' } }
         }
       }
     }
@@ -231,8 +235,10 @@ function renderScrollyChart() {
         backgroundColor: createGradient(ctx, GENRE_COLORS['Strategy']),
         fill: 'start',
         tension: 0.35,
-        pointRadius: labels.map((_, i) => i === 0 ? 4 : 2),
-        pointBackgroundColor: labels.map((_, i) => i === 0 ? themeText : rgba(themeText, 0.35)),
+        pointRadius: labels.map((_, i) => i === 0 ? 9 : 3),
+        pointBackgroundColor: labels.map((_, i) => i === 0 ? '#c9a84c' : rgba(themeText, 0.35)),
+        pointBorderColor: labels.map((_, i) => i === 0 ? 'rgba(201,168,76,0.35)' : 'transparent'),
+        pointBorderWidth: labels.map((_, i) => i === 0 ? 5 : 0),
         borderWidth: 2.5
       }]
     },
@@ -257,11 +263,12 @@ function renderScrollyChart() {
         }
       },
       scales: {
-        x: { grid: { display: false }, ticks: { color: themeSubtle, maxTicksLimit: 10 } },
+        x: { grid: { display: false }, ticks: { color: themeSubtle, maxTicksLimit: 10 }, title: { display: true, text: 'Year', color: themeSubtle, font: { size: 11, family: 'DM Mono, monospace' } } },
         y: {
           grid: { color: 'rgba(240,236,227,0.05)' },
           ticks: { callback: v => fmtM(v), color: themeSubtle },
-          beginAtZero: true
+          beginAtZero: true,
+          title: { display: true, text: 'Prize Money (USD)', color: themeSubtle, font: { size: 11, family: 'DM Mono, monospace' } }
         }
       }
     }
@@ -319,11 +326,12 @@ function renderTopTournamentsChart() {
         x: {
           grid: { color: 'rgba(240,236,227,0.05)' },
           ticks: { callback: v => fmtM(v), color: themeSubtle },
-          title: { display: true, text: 'Prize Pool (USD)', color: themeSubtle, font: { size: 11 } }
+          title: { display: true, text: 'Prize Pool (USD)', color: themeSubtle, font: { size: 11, family: 'DM Mono, monospace' } }
         },
         y: {
           grid: { display: false },
-          ticks: { color: themeSubtle, font: { size: 11 } }
+          ticks: { color: themeSubtle, font: { size: 11 } },
+          title: { display: true, text: 'Tournament', color: themeSubtle, font: { size: 11, family: 'DM Mono, monospace' } }
         }
       }
     }
@@ -366,11 +374,11 @@ function renderGenreChart() {
         }
       },
       scales: {
-        x: { grid: { display: false }, ticks: { color: themeSubtle } },
+        x: { grid: { display: false }, ticks: { color: themeSubtle }, title: { display: true, text: 'Game', color: themeSubtle, font: { size: 11, family: 'DM Mono, monospace' } } },
         y: {
           grid: { color: 'rgba(240,236,227,0.05)' },
           ticks: { callback: v => fmtM(v), color: themeSubtle },
-          title: { display: true, text: 'Total earnings (USD)', color: themeSubtle, font: { size: 11 } }
+          title: { display: true, text: 'Prize Money (USD)', color: themeSubtle, font: { size: 11, family: 'DM Mono, monospace' } }
         }
       }
     }
@@ -449,7 +457,7 @@ function renderOnlineStackedChart() {
       animation: { duration: 800, easing: 'easeOutQuart' },
       plugins: {
         legend: {
-          display: false,
+          display: true,
           position: 'top',
           labels: {
             color: themeSubtle,
@@ -481,13 +489,14 @@ function renderOnlineStackedChart() {
         x: {
           stacked: true,
           grid: { display: false },
-          ticks: { color: themeSubtle }
+          ticks: { color: themeSubtle },
+          title: { display: true, text: 'Game', color: themeSubtle, font: { size: 11, family: 'DM Mono, monospace' } }
         },
         y: {
           stacked: true,
           grid: { color: 'rgba(240,236,227,0.05)' },
           ticks: { callback: v => fmtM(v), color: themeSubtle },
-          title: { display: true, text: 'Prize money (USD)', color: themeSubtle, font: { size: 11 } }
+          title: { display: true, text: 'Prize Money (USD)', color: themeSubtle, font: { size: 11, family: 'DM Mono, monospace' } }
         }
       }
     }
@@ -525,6 +534,10 @@ function updateScrollyChart(stepIndex) {
   if (!scrollyChart) return;
   var dataset = scrollyChart.data.datasets[0];
   dataset.pointRadius = YEAR_DATA.map(function(_, i) { return i === stepIndex ? 8 : 3; });
-  dataset.pointBackgroundColor = YEAR_DATA.map(function(_, i) { return i === stepIndex ? themeText : rgba(themeText, 0.3); });
+  dataset.pointBackgroundColor = YEAR_DATA.map(function(_, i) {
+    return i === stepIndex ? '#c9a84c' : rgba(themeText, 0.3);
+  });
+  dataset.pointBorderColor = GENRE_COLORS['Strategy'];
+  dataset.pointBorderWidth = 1.5;
   scrollyChart.update('none');
 }
