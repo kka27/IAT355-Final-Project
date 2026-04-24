@@ -27,7 +27,7 @@ function initScrolly() {
       const stepIndex = Number(entry.target.dataset.step || 0);
       setActive(stepIndex);
     });
-  }, { threshold: 0.55 });
+  }, { threshold: 0.5 });
 
   steps.forEach(step => observer.observe(step));
   setActive(0);

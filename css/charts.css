@@ -13,14 +13,43 @@
   box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
 }
 
+/* Let Chart.js control canvas sizing entirely.
+   Never set min-height or max-height on canvas —
+   Chart.js with maintainAspectRatio:false sizes it
+   to fill the parent .canvas-container div. */
 .chart-wrap canvas {
   width: 100% !important;
-  min-height: 320px;
+  display: block;
 }
 
-.chart-wrap.fixed-height canvas {
+/* Every chart lives inside a .canvas-container div that
+   carries the explicit pixel height. Chart.js fills it. */
+.canvas-container {
+  position: relative;
+  width: 100%;
+  height: 260px;
+}
+
+/* Ch.01 main growth chart — taller single chart */
+.canvas-container.tall {
+  height: 300px;
+}
+
+/* Ch.03 horizontal bar — needs room for 15 rows */
+.canvas-container.tournament {
+  height: 420px;
+}
+
+/* Ch.02 scrollytelling — constrained by sticky panel */
+.canvas-container.scrolly {
+  height: 400px;
+}
+
+/* Ch.05 stacked bar */
+.canvas-container.stacked {
   height: 320px;
 }
+
 
 .chart-title {
   font-size: 0.75rem;

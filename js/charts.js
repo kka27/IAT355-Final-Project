@@ -13,6 +13,7 @@ let genreChart;
 let onlineOfflineChart;
 let onlineStackedChart;
 
+let stackedMode = 'both';
 
 function initCharts() {
   configureChartDefaults();
@@ -24,6 +25,7 @@ function initCharts() {
   renderGenreChart();
   renderOnlineOfflineChart();
   renderOnlineStackedChart();
+  initStackedToggle();
 }
 
 function configureChartDefaults() {
@@ -31,7 +33,7 @@ function configureChartDefaults() {
   Chart.defaults.font.size = 12;
   Chart.defaults.color = themeText;
   Chart.defaults.backgroundColor = 'transparent';
-  Chart.defaults.borderColor = 'rgba(240,236,227,0.12)';
+  Chart.defaults.borderColor = 'rgba(240,236,227,0.06)';
 }
 
 function baseOptions() {
@@ -45,21 +47,15 @@ function baseOptions() {
         backgroundColor: 'rgba(8,10,14,0.95)',
         titleColor: themeText,
         bodyColor: themeText,
-        borderColor: themeGrid,
+        borderColor: 'rgba(201,168,76,0.3)',
         borderWidth: 1,
         padding: 12,
-        displayColors: false,
-        callbacks: {
-          label: ctx => {
-            const value = ctx.dataset.data[ctx.dataIndex];
-            return `${ctx.dataset.label || ''}: ${fmtM(value)}`;
-          }
-        }
+        displayColors: false
       }
     },
     scales: {
-      x: { grid: { color: themeGrid }, ticks: { color: themeSubtle } },
-      y: { grid: { color: themeGrid }, ticks: { color: themeSubtle }, beginAtZero: true }
+      x: { grid: { color: 'rgba(240,236,227,0.05)' }, ticks: { color: themeSubtle } },
+      y: { grid: { color: 'rgba(240,236,227,0.05)' }, ticks: { color: themeSubtle }, beginAtZero: true }
     }
   };
 }
@@ -67,14 +63,13 @@ function baseOptions() {
 function renderGrowthChart() {
   if (growthChart) growthChart.destroy();
   const ctx = document.getElementById('growthChart').getContext('2d');
-  const data = YEAR_DATA.map(d => d.earnings);
   growthChart = new Chart(ctx, {
     type: 'line',
     data: {
       labels: YEAR_DATA.map(d => d.year),
       datasets: [{
-        label: 'Prize money',
-        data,
+        label: 'Total prize money (USD)',
+        data: YEAR_DATA.map(d => d.earnings),
         borderColor: GENRE_COLORS['MOBA'],
         backgroundColor: createGradient(ctx, GENRE_COLORS['MOBA']),
         fill: 'start',
@@ -82,12 +77,12 @@ function renderGrowthChart() {
         pointRadius: 3,
         pointHoverRadius: 6,
         pointBackgroundColor: themeText,
-        borderWidth: 3
+        borderWidth: 2.5
       }]
     },
     options: {
-      responsive: false,
-      height: 320,
+      responsive: true,
+      maintainAspectRatio: false,
       animation: { duration: 800, easing: 'easeOutQuart' },
       plugins: {
         legend: { display: false },
@@ -95,21 +90,30 @@ function renderGrowthChart() {
           backgroundColor: 'rgba(8,10,14,0.95)',
           titleColor: themeText,
           bodyColor: themeText,
-          borderColor: themeGrid,
+          borderColor: 'rgba(201,168,76,0.3)',
           borderWidth: 1,
           padding: 12,
           displayColors: false,
           callbacks: {
-            label: ctx => {
-              const value = ctx.dataset.data[ctx.dataIndex];
-              return `${ctx.dataset.label || ''}: ${fmtM(value)}`;
-            }
+            title: items => 'Year ' + items[0].label,
+            label: ctx => 'Prize money: ' + fmtM(ctx.raw)
           }
         }
       },
       scales: {
-        x: { grid: { color: themeGrid }, ticks: { color: themeSubtle } },
-        y: { grid: { color: themeGrid }, ticks: { color: themeSubtle }, beginAtZero: true }
+        x: {
+          grid: { color: 'rgba(240,236,227,0.05)' },
+          ticks: { color: themeSubtle, maxTicksLimit: 10 }
+        },
+        y: {
+          grid: { color: 'rgba(240,236,227,0.05)' },
+          ticks: {
+            color: themeSubtle,
+            callback: function(v) { return fmtM(v); },
+            maxTicksLimit: 6
+          },
+          beginAtZero: true
+        }
       }
     }
   });
@@ -125,14 +129,14 @@ function renderTournamentsChart() {
       datasets: [{
         label: 'Tournaments',
         data: YEAR_DATA.map(d => d.tournaments),
-        backgroundColor: rgba(GENRE_COLORS['Battle Royale'], 0.85),
-        borderRadius: 4,
-        barThickness: 18
+        backgroundColor: rgba(GENRE_COLORS['Battle Royale'], 0.8),
+        borderRadius: 3,
+        barThickness: 14
       }]
     },
     options: {
-      responsive: false,
-      height: 320,
+      responsive: true,
+      maintainAspectRatio: false,
       animation: { duration: 800, easing: 'easeOutQuart' },
       plugins: {
         legend: { display: false },
@@ -140,21 +144,23 @@ function renderTournamentsChart() {
           backgroundColor: 'rgba(8,10,14,0.95)',
           titleColor: themeText,
           bodyColor: themeText,
-          borderColor: themeGrid,
+          borderColor: 'rgba(201,168,76,0.3)',
           borderWidth: 1,
           padding: 12,
           displayColors: false,
           callbacks: {
-            label: ctx => {
-              const value = ctx.dataset.data[ctx.dataIndex];
-              return `${ctx.dataset.label || ''}: ${fmtM(value)}`;
-            }
+            title: items => 'Year ' + items[0].label,
+            label: ctx => 'Tournaments: ' + fmtNum(ctx.raw)
           }
         }
       },
       scales: {
-        x: { grid: { display: false }, ticks: { color: themeSubtle } },
-        y: { grid: { color: themeGrid }, ticks: { callback: v => fmtNum(v), color: themeSubtle }, beginAtZero: true }
+        x: { grid: { display: false }, ticks: { color: themeSubtle, maxTicksLimit: 8 } },
+        y: {
+          grid: { color: 'rgba(240,236,227,0.05)' },
+          ticks: { callback: v => fmtNum(v), color: themeSubtle },
+          beginAtZero: true
+        }
       }
     }
   });
@@ -168,7 +174,7 @@ function renderWinnersChart() {
     data: {
       labels: YEAR_DATA.map(d => d.year),
       datasets: [{
-        label: 'Players',
+        label: 'Unique prize-winning players',
         data: YEAR_DATA.map(d => d.players),
         borderColor: GENRE_COLORS['First-Person Shooter'],
         backgroundColor: createGradient(ctx, GENRE_COLORS['First-Person Shooter']),
@@ -176,12 +182,12 @@ function renderWinnersChart() {
         tension: 0.3,
         pointRadius: 3,
         pointHoverRadius: 6,
-        borderWidth: 3
+        borderWidth: 2.5
       }]
     },
     options: {
-      responsive: false,
-      height: 320,
+      responsive: true,
+      maintainAspectRatio: false,
       animation: { duration: 800, easing: 'easeOutQuart' },
       plugins: {
         legend: { display: false },
@@ -189,21 +195,23 @@ function renderWinnersChart() {
           backgroundColor: 'rgba(8,10,14,0.95)',
           titleColor: themeText,
           bodyColor: themeText,
-          borderColor: themeGrid,
+          borderColor: 'rgba(201,168,76,0.3)',
           borderWidth: 1,
           padding: 12,
           displayColors: false,
           callbacks: {
-            label: ctx => {
-              const value = ctx.dataset.data[ctx.dataIndex];
-              return `${ctx.dataset.label || ''}: ${fmtM(value)}`;
-            }
+            title: items => 'Year ' + items[0].label,
+            label: ctx => 'Players: ' + fmtNum(ctx.raw)
           }
         }
       },
       scales: {
-        x: { grid: { color: themeGrid }, ticks: { color: themeSubtle } },
-        y: { grid: { color: themeGrid }, ticks: { callback: v => fmtNum(v), color: themeSubtle }, beginAtZero: true }
+        x: { grid: { color: 'rgba(240,236,227,0.05)' }, ticks: { color: themeSubtle, maxTicksLimit: 8 } },
+        y: {
+          grid: { color: 'rgba(240,236,227,0.05)' },
+          ticks: { callback: v => fmtNum(v), color: themeSubtle },
+          beginAtZero: true
+        }
       }
     }
   });
@@ -217,22 +225,44 @@ function renderScrollyChart() {
     data: {
       labels,
       datasets: [{
-        label: 'Prize money',
+        label: 'Total prize money (USD)',
         data: YEAR_DATA.map(d => d.earnings),
         borderColor: GENRE_COLORS['Strategy'],
         backgroundColor: createGradient(ctx, GENRE_COLORS['Strategy']),
         fill: 'start',
         tension: 0.35,
-        pointRadius: labels.map((year, index) => (index === 0 ? 4 : 2)),
-        pointBackgroundColor: labels.map((year, index) => (index === 0 ? themeText : rgba(themeText, 0.35))),
-        borderWidth: 3
+        pointRadius: labels.map((_, i) => i === 0 ? 4 : 2),
+        pointBackgroundColor: labels.map((_, i) => i === 0 ? themeText : rgba(themeText, 0.35)),
+        borderWidth: 2.5
       }]
     },
     options: {
-      ...baseOptions(),
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 800, easing: 'easeOutQuart' },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(8,10,14,0.95)',
+          titleColor: themeText,
+          bodyColor: themeText,
+          borderColor: 'rgba(201,168,76,0.3)',
+          borderWidth: 1,
+          padding: 12,
+          displayColors: false,
+          callbacks: {
+            title: items => 'Year ' + items[0].label,
+            label: ctx => 'Prize money: ' + fmtM(ctx.raw)
+          }
+        }
+      },
       scales: {
-        x: { ...baseOptions().scales.x, grid: { display: false }, ticks: { color: themeSubtle } },
-        y: { ...baseOptions().scales.y, ticks: { callback: v => fmtM(v), color: themeSubtle } }
+        x: { grid: { display: false }, ticks: { color: themeSubtle, maxTicksLimit: 10 } },
+        y: {
+          grid: { color: 'rgba(240,236,227,0.05)' },
+          ticks: { callback: v => fmtM(v), color: themeSubtle },
+          beginAtZero: true
+        }
       }
     }
   });
@@ -243,24 +273,58 @@ function renderTopTournamentsChart() {
   topTournamentsChart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: TOP_TOURNAMENTS.map(item => item.name),
+      labels: TOP_TOURNAMENTS.map(item =>
+        item.name
+          .replace('The International', 'TI')
+          .replace('Fortnite World Cup Finals 2019 - ', 'FWC 2019 ')
+          .replace('League of Legends World Championship', 'LoL Worlds')
+      ),
       datasets: [{
-        label: 'Prize pool',
+        label: 'Prize pool (USD)',
         data: TOP_TOURNAMENTS.map(item => item.prize),
         backgroundColor: TOP_TOURNAMENTS.map(item => {
-          const gameEntry = ALL_GAMES.find(g => g.game === item.game);
-          return getGenreColor(gameEntry?.genre || 'Strategy');
+          const g = ALL_GAMES.find(g => g.game === item.game);
+          return getGenreColor(g ? g.genre : 'Strategy');
         }),
-        borderRadius: 6,
-        barThickness: 20
+        borderRadius: 3,
+        barThickness: 18
       }]
     },
     options: {
-      ...baseOptions(),
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 800, easing: 'easeOutQuart' },
       indexAxis: 'y',
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(8,10,14,0.95)',
+          titleColor: themeText,
+          bodyColor: themeText,
+          borderColor: 'rgba(201,168,76,0.3)',
+          borderWidth: 1,
+          padding: 12,
+          displayColors: false,
+          callbacks: {
+            title: items => TOP_TOURNAMENTS[items[0].dataIndex].name,
+            label: ctx => 'Prize pool: ' + fmtM(ctx.raw),
+            afterLabel: ctx => {
+              const t = TOP_TOURNAMENTS[ctx.dataIndex];
+              return t.game + ' \u00b7 ' + t.year + ' \u00b7 ' + t.location;
+            }
+          }
+        }
+      },
       scales: {
-        x: { ...baseOptions().scales.x, ticks: { callback: v => fmtM(v), color: themeSubtle } },
-        y: { ...baseOptions().scales.y, ticks: { color: themeSubtle }, grid: { display: false } }
+        x: {
+          grid: { color: 'rgba(240,236,227,0.05)' },
+          ticks: { callback: v => fmtM(v), color: themeSubtle },
+          title: { display: true, text: 'Prize Pool (USD)', color: themeSubtle, font: { size: 11 } }
+        },
+        y: {
+          grid: { display: false },
+          ticks: { color: themeSubtle, font: { size: 11 } }
+        }
       }
     }
   });
@@ -274,18 +338,40 @@ function renderGenreChart() {
     data: {
       labels: topGames.map(g => g.game),
       datasets: [{
-        label: 'Earnings',
+        label: 'Total earnings (USD)',
         data: topGames.map(g => g.totalEarnings),
         backgroundColor: topGames.map(g => getGenreColor(g.genre)),
-        borderRadius: 4,
-        barThickness: 18
+        borderRadius: 3,
+        barThickness: 16
       }]
     },
     options: {
-      ...baseOptions(),
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 800, easing: 'easeOutQuart' },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(8,10,14,0.95)',
+          titleColor: themeText,
+          bodyColor: themeText,
+          borderColor: 'rgba(201,168,76,0.3)',
+          borderWidth: 1,
+          padding: 12,
+          displayColors: false,
+          callbacks: {
+            title: items => items[0].label,
+            label: ctx => 'Total earnings: ' + fmtM(ctx.raw)
+          }
+        }
+      },
       scales: {
-        x: { ...baseOptions().scales.x, grid: { display: false }, ticks: { color: themeSubtle } },
-        y: { ...baseOptions().scales.y, ticks: { callback: v => fmtM(v), color: themeSubtle } }
+        x: { grid: { display: false }, ticks: { color: themeSubtle } },
+        y: {
+          grid: { color: 'rgba(240,236,227,0.05)' },
+          ticks: { callback: v => fmtM(v), color: themeSubtle },
+          title: { display: true, text: 'Total earnings (USD)', color: themeSubtle, font: { size: 11 } }
+        }
       }
     }
   });
@@ -296,7 +382,7 @@ function renderOnlineOfflineChart() {
   onlineOfflineChart = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: ['Online', 'Offline'],
+      labels: ['Online', 'In-Person (LAN)'],
       datasets: [{
         data: [OVERALL_ONLINE_SHARE.online, OVERALL_ONLINE_SHARE.offline],
         backgroundColor: [GENRE_COLORS['Battle Royale'], GENRE_COLORS['MOBA']],
@@ -304,14 +390,28 @@ function renderOnlineOfflineChart() {
       }]
     },
     options: {
-      ...baseOptions(),
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 800, easing: 'easeOutQuart' },
       plugins: {
-        ...baseOptions().plugins,
-        legend: { display: true, position: 'right', labels: { color: themeSubtle } },
+        legend: {
+          display: true,
+          position: 'right',
+          labels: { color: themeSubtle, font: { size: 11 }, padding: 14 }
+        },
         tooltip: {
-          ...baseOptions().plugins.tooltip,
+          backgroundColor: 'rgba(8,10,14,0.95)',
+          titleColor: themeText,
+          bodyColor: themeText,
+          borderColor: 'rgba(201,168,76,0.3)',
+          borderWidth: 1,
+          padding: 12,
+          displayColors: false,
           callbacks: {
-            label: ctx => `${ctx.label}: ${fmtM(ctx.raw)} (${pct(ctx.raw, OVERALL_ONLINE_SHARE.online + OVERALL_ONLINE_SHARE.offline)}%)`
+            label: ctx => {
+              const total = OVERALL_ONLINE_SHARE.online + OVERALL_ONLINE_SHARE.offline;
+              return ctx.label + ': ' + fmtM(ctx.raw) + ' (' + pct(ctx.raw, total) + '%)';
+            }
           }
         }
       }
@@ -330,37 +430,101 @@ function renderOnlineStackedChart() {
         {
           label: 'Online',
           data: topGames.map(g => g.onlineEarnings),
-          backgroundColor: rgba(GENRE_COLORS['Battle Royale'], 0.8),
-          borderRadius: { topLeft: 4, topRight: 4 },
+          backgroundColor: rgba(GENRE_COLORS['Battle Royale'], 0.85),
+          borderRadius: 3,
           stack: 'stack1'
         },
         {
-          label: 'Offline',
+          label: 'In-Person (LAN)',
           data: topGames.map(g => g.totalEarnings - g.onlineEarnings),
-          backgroundColor: rgba(GENRE_COLORS['Strategy'], 0.55),
-          borderRadius: { bottomLeft: 4, bottomRight: 4 },
+          backgroundColor: rgba(GENRE_COLORS['MOBA'], 0.75),
+          borderRadius: 3,
           stack: 'stack1'
         }
       ]
     },
     options: {
-      ...baseOptions(),
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 800, easing: 'easeOutQuart' },
       plugins: {
-        ...baseOptions().plugins,
-        legend: { display: true, position: 'top', labels: { color: themeSubtle } }
+        legend: {
+          display: false,
+          position: 'top',
+          labels: {
+            color: themeSubtle,
+            font: { size: 11 },
+            padding: 16,
+            usePointStyle: true,
+            pointStyleWidth: 10
+          }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(8,10,14,0.95)',
+          titleColor: themeText,
+          bodyColor: themeText,
+          borderColor: 'rgba(201,168,76,0.3)',
+          borderWidth: 1,
+          padding: 12,
+          displayColors: true,
+          callbacks: {
+            title: items => items[0].label,
+            label: ctx => ' ' + ctx.dataset.label + ': ' + fmtM(ctx.raw),
+            footer: items => {
+              var total = items.reduce(function(s, i) { return s + i.raw; }, 0);
+              return 'Total: ' + fmtM(total);
+            }
+          }
+        }
       },
       scales: {
-        x: { ...baseOptions().scales.x, stacked: true, grid: { display: false }, ticks: { color: themeSubtle } },
-        y: { ...baseOptions().scales.y, stacked: true, ticks: { callback: v => fmtM(v), color: themeSubtle } }
+        x: {
+          stacked: true,
+          grid: { display: false },
+          ticks: { color: themeSubtle }
+        },
+        y: {
+          stacked: true,
+          grid: { color: 'rgba(240,236,227,0.05)' },
+          ticks: { callback: v => fmtM(v), color: themeSubtle },
+          title: { display: true, text: 'Prize money (USD)', color: themeSubtle, font: { size: 11 } }
+        }
       }
     }
   });
 }
 
+function initStackedToggle() {
+  document.querySelectorAll('[data-stacked-toggle]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('[data-stacked-toggle]').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      stackedMode = btn.dataset.stackedToggle;
+      updateStackedChart();
+    });
+  });
+}
+
+function updateStackedChart() {
+  if (!onlineStackedChart) return;
+  var ds = onlineStackedChart.data.datasets;
+  if (stackedMode === 'online') {
+    ds[0].hidden = false;
+    ds[1].hidden = true;
+  } else if (stackedMode === 'offline') {
+    ds[0].hidden = true;
+    ds[1].hidden = false;
+  } else {
+    ds[0].hidden = false;
+    ds[1].hidden = false;
+  }
+  onlineStackedChart.update();
+}
+
 function updateScrollyChart(stepIndex) {
   if (!scrollyChart) return;
-  const dataset = scrollyChart.data.datasets[0];
-  dataset.pointRadius = YEAR_DATA.map((__, index) => index === stepIndex ? 8 : 3);
-  dataset.pointBackgroundColor = YEAR_DATA.map((__, index) => index === stepIndex ? themeText : rgba(themeText, 0.3));
+  var dataset = scrollyChart.data.datasets[0];
+  dataset.pointRadius = YEAR_DATA.map(function(_, i) { return i === stepIndex ? 8 : 3; });
+  dataset.pointBackgroundColor = YEAR_DATA.map(function(_, i) { return i === stepIndex ? themeText : rgba(themeText, 0.3); });
   scrollyChart.update('none');
 }

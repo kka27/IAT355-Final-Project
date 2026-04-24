@@ -33,6 +33,8 @@
     initScrolly();
     initGenreCards();
     initTable();
+    buildTournamentLegend();
+    initNavHighlight();
   });
 
   // Reveal sections on scroll
@@ -46,5 +48,37 @@
   }, { threshold: 0.08 });
 
   document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+  function buildTournamentLegend() {
+    const container = document.getElementById('tournament-legend');
+    if (!container) return;
+    const seen = new Set();
+    TOP_TOURNAMENTS.forEach(t => {
+      const game = ALL_GAMES.find(g => g.game === t.game);
+      const genre = game ? game.genre : 'Strategy';
+      if (!seen.has(genre)) {
+        seen.add(genre);
+        const item = document.createElement('div');
+        item.className = 'genre-legend-item';
+        item.innerHTML = '<div class="genre-legend-dot" style="background:' + getGenreColor(genre) + '"></div>' + genre;
+        container.appendChild(item);
+      }
+    });
+  }
+
+  function initNavHighlight() {
+    const navLinks = document.querySelectorAll('.nav-links a');
+    const sections = Array.from(document.querySelectorAll('section[id], div#scrolly'));
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(a => {
+            a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id);
+          });
+        }
+      });
+    }, { threshold: 0.25 });
+    sections.forEach(s => observer.observe(s));
+  }
 
 })();
